@@ -14,13 +14,14 @@
                 {{ product.details?.details?.legal_name }}
             </h3>
         </div>
-        
+
         <div class="flex justify-between items-center mt-2">
             <p class="text-sm text-on-surface-variant">
                 {{ product.marca }}
             </p>
             <button
                 class="text-sm font-medium text-primary rounded-lg px-3 py-1 hover:bg-primary/10 transition-colors"
+                @click="push(`/product/${product.slug}`)"
             >
                 Details
             </button>
@@ -29,8 +30,9 @@
 </template>
 
 <script setup>
+import { useRouter } from "vue-router";
 const { product } = defineProps({
     product: { type: Object, required: true },
 });
-console.log(product);
+const { push } = useRouter();
 </script>

@@ -28,6 +28,7 @@ const { products, loading, error, loadProducts } = useProducts();
 onMounted(() => {
     loadProducts();
 });
+console.log(products);
 
 const handleSearch = useDebounceFn(() => {
     if (searchQuery.value && searchQuery.value.length > 3) {
