@@ -5,7 +5,6 @@ export const useProductsStore = defineStore('products', () => {
   const products = ref({})
 
   const getProduct = (slug) => {
-    console.log(products[slug])
     return products[slug] || null
   }
 

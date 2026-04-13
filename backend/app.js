@@ -1,10 +1,14 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
+import fastifyStatic from '@fastify/static'
 import env from './plugins/env.js'
 import pocketbase from './plugins/db.js'
-
 import productsRoutes from './modules/products/routes.js'
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 export async function buildServer() {
   const app = Fastify({
@@ -14,6 +18,20 @@ export async function buildServer() {
 
   await app.register(cors, {
     origin: true
+  })
+
+  await app.register(fastifyStatic, {
+    root: join(__dirname, 'public'),
+    prefix: '/',
+    index: 'index.html'
+  })
+
+  await app.setErrorHandler((error, request, reply) => {
+    if (request.url.startsWith('/api')) {
+      reply.code(500).send({ error: error.message })
+    } else {
+      reply.sendFile('index.html')
+    }
   })
 
   await app.register(env)

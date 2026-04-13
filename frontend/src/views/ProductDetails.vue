@@ -88,6 +88,9 @@
                 </div>
             </div>
         </div>
+        <div class="flex flex-col items-center py-12 gap-4">
+            <PriceHistory :productId="product.id" />
+        </div>
     </div>
 
     <div v-else-if="loading" class="flex flex-col items-center justify-center py-24 gap-4">
@@ -120,6 +123,7 @@ import { Pagination, Navigation } from "swiper/modules";
 import { useProductsStore } from "@/stores/products";
 
 import ProductDetailsImages from "@/components/ProductDetailsImages.vue";
+import PriceHistory from "@/components/PriceHistory.vue";
 
 const route = useRoute();
 const productsStore = useProductsStore();
@@ -129,11 +133,9 @@ const loading = ref(true);
 const product = productsStore.getProduct(route.params.slug);
 
 const getPhotos = () => {
-    console.log(product.details.photos, !product.details?.photos?.length);
     if (!product.details?.photos?.length) {
         return [{ regular: product.imagen || "" }];
     }
     return product.details.photos;
 };
-console.log(getPhotos());
 </script>

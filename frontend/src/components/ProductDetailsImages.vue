@@ -1,7 +1,7 @@
 <template>
     <div v-if="product" class="flex flex-col items-center w-full">
         <div class="relative group bg-surface-container rounded-3xl overflow-hidden w-fit shadow-sm">
-            <div class="flex items-center justify-center min-h-[400px] md:h-[550px]">
+            <div class="flex items-center justify-center min-h-100 md:h-137.5">
                 <transition name="fade" mode="out-in">
                     <img
                         :key="currentIndex"
@@ -50,7 +50,6 @@ export default {
             if (!this.product.details?.photos?.length) {
                 return [{ regular: this.product.imagen || "" }];
             }
-            console.log(this.product.details.photos);
             return this.product.details.photos;
         },
         next() {

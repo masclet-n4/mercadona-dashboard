@@ -32,3 +32,10 @@ coverage/
 
 # Cache
 .cache/
+
+# Docker
+docker-compose.yml
+
+# Data files
+product.json
+price.json

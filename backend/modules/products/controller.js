@@ -3,7 +3,6 @@ import * as productsService from './service.js'
 
 export async function getProducts(request, reply) {
   const { page = 1, limit = 10, filter } = request.query
-  console.log({filter})
   try {
     const products = await productsService.getAllProducts(request.server.pb, { page, limit, filter: `nombre ~ "${filter}"` })
 
