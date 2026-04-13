@@ -10,7 +10,7 @@
             />
         </div>
 
-        <div v-if="products.items">
+        <div v-if="products?.items">
             <ProductsList :products="products.items" />
         </div>
     </div>

@@ -21,7 +21,7 @@
             </p>
             <button
                 class="text-sm font-medium text-primary rounded-lg px-3 py-1 hover:bg-primary/10 transition-colors"
-                @click="push(`/product/${product.slug}`)"
+                @click="push(`/product/${product.id}`)"
             >
                 Details
             </button>

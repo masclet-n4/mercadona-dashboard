@@ -4,7 +4,7 @@ import { ref } from 'vue'
 export const useHistoricStore = defineStore('historic', () => {
   const historic = ref({})
 
-  const getHistoric = (slug) => {
+  const getHistoric = () => {
     return historic.value
   }
 

@@ -1,24 +1,30 @@
+import { getProductById } from '@/api/products'
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 export const useProductsStore = defineStore('products', () => {
   const products = ref({})
 
-  const getProduct = (slug) => {
-    return products[slug] || null
+  const getProduct = async (id) => {
+    if (products[id]) return products[id]
+
+    const res = await getProductById(id)
+    products[id] = res.data.data
+
+    return products[id];
   }
 
   const setProducts = (items) => {
     items?.forEach((product) => {
-      if (product.slug) {
-        products[product.slug] = product
+      if (product.id) {
+        products[product.id] = product
       }
     })
   }
 
   const setProduct = (product) => {
-    if (product?.slug) {
-      products.value[product.slug] = product
+    if (product?.id) {
+      products.value[product.id] = product
     }
   }
 

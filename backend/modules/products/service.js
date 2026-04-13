@@ -6,6 +6,13 @@ export async function getAllProducts(pb, { page, limit, filter }) {
   return result;
 }
 
+export async function getProductById(pb, id) {
+  const result = await pb.collection('mercadona_products').getOne(id)
+
+  return result
+}
+
+
 export async function getHistoricalData(pb, { id, start, end }) {
 
   if (!start || !end) {

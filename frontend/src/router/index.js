@@ -6,7 +6,7 @@ import ProductDetails from '../views/ProductDetails.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: HomeView },
-  { path: '/product/:slug', name: 'ProductDetails', component: ProductDetails}
+  { path: '/product/:id', name: 'ProductDetails', component: ProductDetails}
 ]
 
 const router = createRouter({

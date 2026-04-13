@@ -117,25 +117,21 @@
 </style>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { Pagination, Navigation } from "swiper/modules";
 import { useProductsStore } from "@/stores/products";
 
 import ProductDetailsImages from "@/components/ProductDetailsImages.vue";
 import PriceHistory from "@/components/PriceHistory.vue";
 
 const route = useRoute();
-const productsStore = useProductsStore();
-const swiperContainer = ref(null);
+const { getProduct } = useProductsStore();
+
+const product = ref(null);
 const loading = ref(true);
 
-const product = productsStore.getProduct(route.params.slug);
-
-const getPhotos = () => {
-    if (!product.details?.photos?.length) {
-        return [{ regular: product.imagen || "" }];
-    }
-    return product.details.photos;
-};
+onMounted(async () => {
+    product.value = await getProduct(route.params.id);
+    loading.value = false;
+});
 </script>
