@@ -16,8 +16,13 @@ export async function buildServer() {
     trustProxy: true
   })
 
+  const isProduction = process.env.NODE_ENV === 'production'
+
   await app.register(cors, {
-    origin: true
+    origin: isProduction
+      ? 'https://mercadona-dashboard.jccantos.com'
+      : true,
+    credentials: true
   })
 
   await app.register(fastifyStatic, {
@@ -26,7 +31,7 @@ export async function buildServer() {
     index: 'index.html'
   })
 
-  await app.setErrorHandler((error, request, reply) => {
+  app.setErrorHandler((error, request, reply) => {
     if (request.url.startsWith('/api')) {
       reply.code(500).send({ error: error.message })
     } else {
