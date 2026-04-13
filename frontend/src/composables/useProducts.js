@@ -1,9 +1,11 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { getProducts, getProductById } from '@/api/products.js'
 import { useProductsStore } from '@/stores/products.js'
 
 export function useProducts() {
   const products = ref({ items: [] })
+  const page = ref(1)
+  const totalPages = ref(1)
   const loading = ref(false)
   const error = ref(null)
   const productsStore = useProductsStore()
@@ -16,6 +18,8 @@ export function useProducts() {
       const response = await getProducts(params)
       products.value = response.data.data
       productsStore.setProducts(response.data.data.items || [])
+      page.value = response.data.data.page || 1
+      totalPages.value = response.data.data.totalPages || 1
     } catch (err) {
       error.value = err.message || 'Error al cargar productos'
     } finally {
@@ -26,7 +30,6 @@ export function useProducts() {
   const loadProduct = async (id) => {
     loading.value = true
     error.value = null
-    console.log("hola")
 
     try {
       const response = await getProductById(id)
@@ -42,6 +45,8 @@ export function useProducts() {
 
   return {
     products,
+    page,
+    totalPages,
     loading,
     error,
     loadProducts,

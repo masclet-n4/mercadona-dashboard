@@ -10,14 +10,14 @@
                     type="text"
                     placeholder="Busca el nombre del producto..."
                     v-model="searchQuery"
-                    @input="handleSearch"
+                    @input="handleSearch()"
                     class="w-full pl-14 pr-6 py-4 rounded-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant/50 border border-transparent focus:border-primary/30 focus:bg-surface-container-lowest focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all duration-200 shadow-sm text-base"
                 />
             </div>
         </div>
 
-        <!-- Estado: cargando -->
-        <div v-if="loading" class="w-full max-w-7xl">
+        <!-- Estado: cargando (primera carga, sin productos aún) -->
+        <div v-if="loading && !products?.items?.length" class="w-full max-w-7xl">
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                 <div
                     v-for="n in 8"
@@ -36,7 +36,49 @@
 
         <!-- Estado: resultados -->
         <div v-else-if="products?.items?.length" class="w-full">
+            <div class="flex justify-end items-center gap-4 pb-4 max-w-7xl mx-auto">
+                <button
+                    @click="goToPage(page - 1)"
+                    :disabled="page <= 1 || loading"
+                    class="px-4 py-2 rounded-full bg-surface-container-low text-on-surface disabled:opacity-30 disabled:cursor-not-allowed hover:bg-surface-container-high transition-colors"
+                >
+                    Anterior
+                </button>
+                <span class="text-on-surface-variant flex items-center gap-2">
+                    <Loader2 v-if="loading" class="w-4 h-4 animate-spin" />
+                    Página {{ page }} de {{ totalPages }}
+                </span>
+                <button
+                    @click="goToPage(page + 1)"
+                    :disabled="page >= totalPages || loading"
+                    class="px-4 py-2 rounded-full bg-surface-container-low text-on-surface disabled:opacity-30 disabled:cursor-not-allowed hover:bg-surface-container-high transition-colors"
+                >
+                    Siguiente
+                </button>
+            </div>
+
             <ProductsList :products="products.items" />
+
+            <div class="flex justify-end items-center gap-4 pt-4 max-w-7xl mx-auto">
+                <button
+                    @click="goToPage(page - 1)"
+                    :disabled="page <= 1 || loading"
+                    class="px-4 py-2 rounded-full bg-surface-container-low text-on-surface disabled:opacity-30 disabled:cursor-not-allowed hover:bg-surface-container-high transition-colors"
+                >
+                    Anterior
+                </button>
+                <span class="text-on-surface-variant flex items-center gap-2">
+                    <Loader2 v-if="loading" class="w-4 h-4 animate-spin" />
+                    Página {{ page }} de {{ totalPages }}
+                </span>
+                <button
+                    @click="goToPage(page + 1)"
+                    :disabled="page >= totalPages || loading"
+                    class="px-4 py-2 rounded-full bg-surface-container-low text-on-surface disabled:opacity-30 disabled:cursor-not-allowed hover:bg-surface-container-high transition-colors"
+                >
+                    Siguiente
+                </button>
+            </div>
         </div>
 
         <!-- Estado: sin resultados -->
@@ -55,19 +97,31 @@
 import { ref, onMounted } from "vue";
 import { useDebounceFn } from "@vueuse/core";
 import { useProducts } from "@/composables/useProducts";
-import { Search, SearchX } from "lucide-vue-next";
+import { Search, SearchX, Loader2 } from "lucide-vue-next";
 import ProductsList from "@/components/ProductsList.vue";
 
 const searchQuery = ref("");
-const { products, loading, error, loadProducts } = useProducts();
+const { products, page, totalPages, loading, loadProducts } = useProducts();
+
+const buildParams = (newPage = 1) => {
+    const params = { page: newPage };
+    if (searchQuery.value.length > 3) {
+        params.filter = searchQuery.value;
+    }
+    return params;
+};
 
 onMounted(() => {
     loadProducts();
 });
 
 const handleSearch = useDebounceFn(() => {
-    if (searchQuery.value && searchQuery.value.length > 3) {
-        loadProducts({ filter: searchQuery.value });
-    }
+    loadProducts(buildParams(1));
 }, 500);
+
+const goToPage = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages.value && !loading.value) {
+        loadProducts(buildParams(newPage));
+    }
+};
 </script>
