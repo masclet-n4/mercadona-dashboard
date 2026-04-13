@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full h-75 bg-emerald-100 rounded-xl p-4 shadow">
+    <div class="w-full h-75 bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-4 shadow-sm">
         <Line :data="chartData" :options="chartOptions" />
     </div>
 </template>
@@ -51,7 +51,8 @@ const chartData = computed(() => ({
         {
             label: "Precio",
             data: historic.value.map((item) => item.unit_price),
-            borderColor: "#42A5F5",
+            borderColor: "#006a37",
+            backgroundColor: "rgba(0, 106, 55, 0.08)",
             tension: 0.4,
         },
     ],
