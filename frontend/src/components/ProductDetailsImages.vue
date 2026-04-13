@@ -1,34 +1,40 @@
 <template>
-    <div v-if="product" class="flex flex-col items-center w-full">
-        <div class="relative group bg-surface-container rounded-3xl overflow-hidden w-fit shadow-sm">
-            <div class="flex items-center justify-center min-h-100 md:h-137.5">
-                <transition name="fade" mode="out-in">
-                    <img
-                        :key="currentIndex"
-                        :src="getPhotos()[currentIndex].regular"
-                        :alt="product.nombre"
-                        class="h-full w-auto object-contain block"
-                    />
-                </transition>
-            </div>
+    <div v-if="product" class="w-full">
+        <div class="relative group">
+            <transition name="fade" mode="out-in">
+                <img
+                    :key="currentIndex"
+                    :src="getPhotos()[currentIndex].regular"
+                    :alt="product.nombre"
+                    class="w-full h-auto object-contain rounded-2xl block"
+                />
+            </transition>
 
             <template v-if="getPhotos().length > 1">
                 <button
                     @click="prev"
-                    class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/10 hover:bg-black/30 text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+                    class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/20 hover:bg-black/40 text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
                 >
                     ‹
                 </button>
                 <button
                     @click="next"
-                    class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/10 hover:bg-black/30 text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+                    class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/20 hover:bg-black/40 text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
                 >
                     ›
                 </button>
             </template>
         </div>
 
-        <div v-if="getPhotos().length > 1" class="flex gap-2 mt-4"></div>
+        <div v-if="getPhotos().length > 1" class="flex gap-2 mt-3 justify-center">
+            <button
+                v-for="(_, i) in getPhotos()"
+                :key="i"
+                @click="currentIndex = i"
+                class="w-1.5 h-1.5 rounded-full transition-all duration-200"
+                :class="i === currentIndex ? 'bg-primary w-4' : 'bg-outline-variant'"
+            />
+        </div>
     </div>
 </template>
 
@@ -42,7 +48,7 @@ export default {
     },
     data() {
         return {
-            currentIndex: 0, // Controlamos qué foto se ve
+            currentIndex: 0,
         };
     },
     methods: {
@@ -65,19 +71,13 @@ export default {
 </script>
 
 <style scoped>
-/* Transición suave de desvanecimiento (Fade) */
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.3s ease;
+    transition: opacity 0.25s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
-}
-
-/* Ocultar scrollbar por si acaso */
-.scrollbar-hide::-webkit-scrollbar {
-    display: none;
 }
 </style>
