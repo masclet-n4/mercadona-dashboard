@@ -58,3 +58,22 @@ export async function getHistorical(request, reply) {
     })
   }
 }
+
+export async function getStats(request, reply) {
+  const { page = 1, limit = 10, filter = '', sort = '' } = request.query
+  try {
+    const stats = await productsService.getAllStats(request.server.pb, { page, limit, filter, sort })
+
+    return reply.code(200).send({
+      success: true,
+      data: stats
+    })
+  } catch (error) {
+    request.log.error(error)
+
+    return reply.code(500).send({
+      success: false,
+      message: 'Error al obtener los productos'
+    })
+  }
+}

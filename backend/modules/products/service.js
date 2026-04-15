@@ -34,3 +34,11 @@ export async function getHistoricalData(pb, { id, start, end }) {
 
   return result
 }
+
+export async function getAllStats(pb, { page, limit, filter, sort }) {
+  // En pocketbase se usa = (igual) != (diferente) ~ (contiene)
+  const result = await pb.collection('mercadona_stats').getList(page, limit, {
+    filter, sort, expand: 'product_id' })
+
+  return result;
+}
