@@ -4,7 +4,7 @@ import * as productsService from './service.js'
 export async function getProducts(request, reply) {
   const { page = 1, limit = 10, filter = '' } = request.query
   try {
-    const products = await productsService.getAllProducts(request.server.pb, { page, limit, filter: `nombre ~ "${filter}"` })
+    const products = await request.server.pbRequest(pb => productsService.getAllProducts(pb, { page, limit, filter: `nombre ~ "${filter}"` }))
 
     return reply.code(200).send({
       success: true,
@@ -23,7 +23,7 @@ export async function getProducts(request, reply) {
 export async function getProductById(request, reply) {
   const { id } = request.params
   try {
-    const product = await productsService.getProductById(request.server.pb, id)
+    const product = await request.server.pbRequest(pb => productsService.getProductById(pb, id))
 
     return reply.code(200).send({
       success: true,
@@ -43,7 +43,8 @@ export async function getHistorical(request, reply) {
   const { start, end } = request.query
   const { id } = request.params
   try {
-    const data = await productsService.getHistoricalData(request.server.pb, { id, start, end })
+
+    const data = await request.server.pbRequest(pb => productsService.getHistoricalData(pb, { id, start, end }))
 
     return reply.code(200).send({
       success: true,
@@ -62,7 +63,8 @@ export async function getHistorical(request, reply) {
 export async function getStats(request, reply) {
   const { page = 1, limit = 10, filter = '', sort = '' } = request.query
   try {
-    const stats = await productsService.getAllStats(request.server.pb, { page, limit, filter, sort })
+
+    const stats = await request.server.pbRequest(pb => productsService.getAllStats(pb, { page, limit, filter, sort }))
 
     return reply.code(200).send({
       success: true,
